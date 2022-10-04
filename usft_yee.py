@@ -10,6 +10,12 @@ from yeelight import *
 
 TITLE = " - Unisticsearch-FT-Yee - "
 BLOOD_TYPE = ["A", "B", "O", "AB"]
+MAGENTA = "\033[35m"
+YELLOW = "\033[33m"
+LIGHTGREEN = "\033[38;2;50;255;0m"
+CYAN = "\033[36m"
+PURPLE = "\033[38;2;200;100;255m"
+RESET = "\033[0m"
 
 INPUTTIME_TRANSITION = [
   RGBTransition(150, 150, 255, duration = 3000, brightness = 60),
@@ -108,20 +114,20 @@ def main():
 
     # 占いの結果によってYeelightの色を変更する処理
     result = int(result / 3)
-    if result > 80:
-      print(f"Result: Your today's fortune is \"大吉\" ({result}points)!!")
+    if result >= 80:
+      print(f"Result: Your today's fortune is \"{MAGENTA}大吉{RESET}\"({result}points)!!")
       yeelight_setflow(yee_handler, DAIKITI_TRANSITION)
-    elif result > 60:
-      print(f"Result: Your today's fortune is \"中吉\" ({result}points)!!")
+    elif result >= 60:
+      print(f"Result: Your today's fortune is \"{YELLOW}中吉{RESET}\"({result}points)!!")
       yeelight_setflow(yee_handler, TYUKITI_TRANSITION)
-    elif result > 40:
-      print(f"Result: Your today's fortune is \"小吉\" ({result}points)!!")
+    elif result >= 40:
+      print(f"Result: Your today's fortune is \"{LIGHTGREEN}小吉{RESET}\"({result}points)!!")
       yeelight_setflow(yee_handler, SYOUKITI_TRANSITION)
-    elif result > 20:
-      print(f"Result: Your today's fortune is \"末吉\" ({result}points)!!")
+    elif result >= 20:
+      print(f"Result: Your today's fortune is \"{CYAN}末吉{RESET}\"({result}points)!!")
       yeelight_setflow(yee_handler, SUEKITI_TRANSITION)
     else:
-      print(f"Result: Your today's fortune is \"凶\" ({result}points)!!")
+      print(f"Result: Your today's fortune is \"{PURPLE}凶{RESET}\"({result}points)!!")
       yeelight_setflow(yee_handler, KYOU_TRANSITION)
     input("Press Enter key to exit the program...")
   except KeyboardInterrupt:

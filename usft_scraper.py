@@ -87,7 +87,7 @@ def uranai_square_parser(bt_num, verbose):
       print(f"{' ' * 2}Love luck:\n{' ' * 4}advice: {advice_arrange(love_luck, 12)}")
       print(f"{' ' * 2}Work luck:\n{' ' * 4}advice: {advice_arrange(work_luck, 12)}")
       print(f"{' ' * 2}Lucky color:\n{' ' * 4}name: {lucky_color}")
-      print(f"{' ' * 2}Lucky item:\n{' ' * 4}name: {lucky_item}")
+      print(f"{' ' * 2}Lucky word:\n{' ' * 4}name: {lucky_item}")
     result += abs(rank - 4) * 30
   except Exception:
     print("Error: failed to get fortune-telling information")
@@ -128,7 +128,7 @@ def line_fortune_parser(birthday, verbose):
       lucky_item = soup.select("span.lucky-overview_lucky__value__u2h81")[0].get_text()
       lucky_color = soup.select("span.lucky-overview_lucky__value__u2h81")[1].get_text()
       print(f"{' ' * 2}Lucky item:\n{' ' * 4}name: {lucky_item}")
-      print(f"{' ' * 2}Lucky Color:\n{' ' * 4}name: {lucky_color}")
+      print(f"{' ' * 2}Lucky color:\n{' ' * 4}name: {lucky_color}")
   except Exception as e:
     print("Error: failed to get fortune-telling information")
     return 0
