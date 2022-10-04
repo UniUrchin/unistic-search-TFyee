@@ -111,9 +111,10 @@ def main():
     result += usft_scraper.vogue_horoscpope_parser(birthday, args.verbose)
     result += usft_scraper.uranai_square_parser(BLOOD_TYPE.index(blood_type), args.verbose)
     result += usft_scraper.line_fortune_parser(birthday, args.verbose)
+    result += usft_scraper.ntv_sukkirisu_parser(birthday, args.verbose)
 
     # 占いの結果によってYeelightの色を変更する処理
-    result = int(result / 3)
+    result = int(result / 4)
     if result >= 80:
       print(f"Result: Your today's fortune is \"{MAGENTA}大吉{RESET}\"({result}points)!!")
       yeelight_setflow(yee_handler, DAIKITI_TRANSITION)
@@ -147,6 +148,7 @@ def yeelight_setflow(yee_handler, transition):
 # Yeelightの電源を比較的安全に落とす関数
 def yeelight_cleanup(yee_handler):
   try:
+    yee_handler.set_rgb(150, 150, 255)
     yee_handler.turn_off()
   except:
     print("Warning: Disconnected with Yeelight but still powered on")
