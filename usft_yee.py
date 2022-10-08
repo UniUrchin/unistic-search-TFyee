@@ -1,7 +1,8 @@
 import argparse
-from ast import arg
 import datetime
+import itertools
 import json
+import random
 import sys
 import usft_scraper
 import yeelight
@@ -10,6 +11,7 @@ from yeelight import *
 
 TITLE = " - Unisticsearch-FT-Yee - "
 BLOOD_TYPE = ["A", "B", "O", "AB"]
+RED = "\033[31m"
 MAGENTA = "\033[35m"
 YELLOW = "\033[33m"
 LIGHTGREEN = "\033[38;2;50;255;0m"
@@ -107,29 +109,45 @@ def main():
     # 占いサイトへのスクレイピング処理
     print("Start today's fortune-telling analysis...\n")
     yeelight_setflow(yee_handler, SEARCHTIME_TRANSITION)
-    result = 0
+    result = []
     result += usft_scraper.vogue_horoscpope_parser(birthday, args.verbose)
+    result += usft_scraper.ntv_sukkirisu_parser(birthday.month, args.verbose)
     result += usft_scraper.uranai_square_parser(BLOOD_TYPE.index(blood_type), args.verbose)
     result += usft_scraper.line_fortune_parser(birthday, args.verbose)
-    result += usft_scraper.ntv_sukkirisu_parser(birthday, args.verbose)
+    result += usft_scraper.estart_uranai_parser(birthday.month, args.verbose)
 
-    # 占いの結果によってYeelightの色を変更する処理
-    result = int(result / 4)
-    if result >= 80:
-      print(f"Result: Your today's fortune is \"{MAGENTA}大吉{RESET}\"({result}points)!!")
-      yeelight_setflow(yee_handler, DAIKITI_TRANSITION)
-    elif result >= 60:
-      print(f"Result: Your today's fortune is \"{YELLOW}中吉{RESET}\"({result}points)!!")
-      yeelight_setflow(yee_handler, TYUKITI_TRANSITION)
-    elif result >= 40:
-      print(f"Result: Your today's fortune is \"{LIGHTGREEN}小吉{RESET}\"({result}points)!!")
-      yeelight_setflow(yee_handler, SYOUKITI_TRANSITION)
-    elif result >= 20:
-      print(f"Result: Your today's fortune is \"{CYAN}末吉{RESET}\"({result}points)!!")
-      yeelight_setflow(yee_handler, SUEKITI_TRANSITION)
+    # 占いの結果を表示、結果によってYeelightの色を変更する処理
+    scores = [res[0] for res in result]
+    score = int(sum(scores) / len(result))
+    if score >= 80:
+      fortune = f"{MAGENTA}大吉{RESET}"
+      transition = DAIKITI_TRANSITION
+    elif score >= 60:
+      fortune = f"{YELLOW}中吉{RESET}"
+      transition = TYUKITI_TRANSITION
+    elif score >= 40:
+      fortune = f"{LIGHTGREEN}小吉{RESET}"
+      transition = SYOUKITI_TRANSITION
+    elif score >= 20:
+      fortune = f"{CYAN}末吉{RESET}"
+      transition = SUEKITI_TRANSITION
     else:
-      print(f"Result: Your today's fortune is \"{PURPLE}凶{RESET}\"({result}points)!!")
-      yeelight_setflow(yee_handler, KYOU_TRANSITION)
+      fortune = f"{PURPLE}凶{RESET}"
+      transition = KYOU_TRANSITION
+
+    print(f"Result: Your today's fortune is \"{fortune}\"({score}points)!!")
+    yeelight_setflow(yee_handler, transition)
+
+    # 今日のラッキーリストを表示する処理
+    ttl_title = " - Today's Lucky List (TLL) - "
+    lucky_things = list(itertools.chain.from_iterable([res[1] for res in result]))
+    recommendeds = [res[1] for res in result][scores.index(max(scores))]
+    recommended = recommendeds[random.randint(0, len(recommendeds) - 1)]
+    print(f"{'-' * len(ttl_title)}\n{ttl_title}\n{'-' * len(ttl_title)}")
+    for lucky_thing in lucky_things:
+      print(f"{' ' * 2}- {lucky_thing}{f'{RED} <- Recommended!!{RESET}' if lucky_thing == recommended else ''}")
+    print(f"{'-' * len(ttl_title)}")
+
     input("Press Enter key to exit the program...")
   except KeyboardInterrupt:
     yeelight_cleanup(yee_handler)
