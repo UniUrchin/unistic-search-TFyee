@@ -171,6 +171,7 @@ def estart_uranai_parser(month, verbose):
     result += (general_star - 1) * 45 + 10
     lucky_stuff = [tag.get_text().split("： ")[-1] for tag in soup.select("div.lucky_stuff p")]
     icons = [tag.get_text() for tag in soup.select("table.table_weather p")]
+    tarots = [tag.get("alt") for tag in soup.select("div#uranai_tarot_card img")]
     scores = [(mapping[icon] - 1) * 45 + 10 for icon in icons]
     result += sum(scores)
     if verbose:
@@ -178,9 +179,12 @@ def estart_uranai_parser(month, verbose):
       print(f"{' ' * 2}General luck:")
       print(f"{' ' * 4}star: {'★ ' * general_star}{'☆ ' * (3 - general_star)} ({(general_star - 1) * 45 + 10}points)")
       print(f"{' ' * 4}advice: {advice_arrange(advice, 12)}")
-      print(f"{' ' * 2}Love luck:\n{' ' * 4}icon: {icons[0]} ({scores[0]}points)")
-      print(f"{' ' * 2}Money luck:\n{' ' * 4}icon: {icons[1]} ({scores[1]}points)")
-      print(f"{' ' * 2}Work luck:\n{' ' * 4}icon: {icons[2]} ({scores[2]}points)")
+      print(f"{' ' * 2}Love luck:")
+      print(f"{' ' * 4}icon: {icons[0]} ({scores[0]}points)\n{' ' * 4}tarot: {tarots[0]}")
+      print(f"{' ' * 2}Money luck:")
+      print(f"{' ' * 4}icon: {icons[1]} ({scores[1]}points)\n{' ' * 4}tarot: {tarots[1]}")
+      print(f"{' ' * 2}Work luck:")
+      print(f"{' ' * 4}icon: {icons[2]} ({scores[2]}points)\n{' ' * 4}tarot: {tarots[2]}")
       print(f"{' ' * 2}Lucky item:\n{' ' * 4}name: {lucky_stuff[0]}")
       print(f"{' ' * 2}Lucky color:\n{' ' * 4}name: {lucky_stuff[1]}")
       print(f"{' ' * 2}Lucky number:\n{' ' * 4}name: {lucky_stuff[2]}")
