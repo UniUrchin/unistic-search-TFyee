@@ -26,6 +26,8 @@ $ python3 usft_yee.py
 
 ## Usage
 
+### 占い情報を手動で入力する場合
+
 usft_yee.pyを実行すると、YeeLightのIPアドレスを探索するフェーズに入るので少し待つ。
 
 ```
@@ -90,6 +92,80 @@ Result: Your today's fortune is "小吉"(46points)!!
   - 数字の1
 ------------------------------
 Press Enter key to exit the program...
+```
+
+### 占い情報をファイルから読み取る場合
+
+占い情報を以下のようなJSON形式(ftprofile)として保存することで、`-f`引数にファイル名を指定するとそこから占い情報を読み込んで実行してくれる。
+
+```
+{
+  "birthday": "1111-11-11",
+  "blood_type": "A"
+}
+```
+
+誕生日と血液型の入力が不要になるため、占いの自動実行などに使えるかも。
+
+```
+$ python3 usft_yee.py -f ./ftprofile/sample.json
+
+==========================
+ - Unisticsearch-FT-Yee -
+==========================
+Discover Yeelight on your local network...
+Success: Your Yeelight's IP address is "***.***.***.***"
+
+Loading required information for fortune-telling
+Start today's fortune-telling analysis...
+```
+
+### もう少し詳しく占いの内容が知りたい!!
+
+引数として`-v`を指定することで、平均スコアの表示に加えてアドバイスや具体的なスコアリングなどの詳細情報を表示してくれるようになる。
+
+```
+$ python3 usft_yee.py -v
+
+==========================
+ - Unisticsearch-FT-Yee -
+==========================
+
+(中略)
+
+VOGUE HOROSCOPE: https://www.vogue.co.jp/horoscope（乙女座の運勢）
+  Love luck:
+    star: ★ ☆ ☆ ☆ ☆  (20points)
+    advice: 波乱運
+            年長者のアドバイスから恋のヒントが得られそう
+            ただ、行動に移すのはもう少し先です
+            今日は大人しく過ごした方が良いでしょう
+  Interparsonal luck:
+    star: ★ ★ ☆ ☆ ☆  (40points)
+    advice: 自重運
+            普段の何気ない会話から、相手の真意を見出してみよう
+            意外な一面を発見できるかも
+            コミュニケーションを疎かにしないことが大切
+  Work and Study luck:
+    star: ★ ★ ★ ☆ ☆  (60points)
+    advice: 吉凶混合運
+            誤字・脱字などの小さなミスが頻発します
+            逆にそうしたケアレスミスを意識する習慣をつけると今後のあなたの糧に
+  Money luck:
+    star: ★ ★ ☆ ☆ ☆  (40points)
+    advice: 自重運
+            収入アップを望むあまり、詐欺などに引っかかってしまうかも
+            おいしすぎる話は、疑ってかかるように注意しましょう
+  Health and Beauty luck:
+    star: ★ ☆ ☆ ☆ ☆  (20points)
+    advice: 波乱運
+            気分も体調もどんよりして、ボンヤリしがち……
+            無理をすると悪化すると暗示があるので、今日はゆっくり休養しましょう
+  Lucky item:
+    name: ルーペ
+Success: The average score for VOGUE HOROSCOPE is 20 points
+
+(中略)
 ```
 
 ## Features
